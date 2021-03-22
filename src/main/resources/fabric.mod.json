@@ -1,0 +1,44 @@
+{
+  "schemaVersion": 1,
+  "id": "fire",
+  "version": "${version}",
+  "name": "Fire",
+  "description": "FIRE!",
+  "authors": [
+    "Austin (Hoi_A)"
+  ],
+  "contact": {
+    "website": "https://neat.moe/",
+    "repo": "https://github.com/Hoi15A/fire"
+  },
+  "license": "AGPL-3.0",
+  "icon": "assets/fire/icon.png",
+  "environment": "client",
+  "entrypoints": {
+    "client": [
+      "moe.neat.fire.client.FireClient"
+    ],
+    "main": [
+      "moe.neat.fire.Fire"
+    ],
+    "modmenu": [
+      "moe.neat.fire.config.ModMenuIntegration"
+    ]
+  },
+  "mixins": [
+    "fire.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=0.11.3",
+    "fabric": "*",
+    "minecraft": "1.16.5"
+  },
+  "custom": {
+    "modmenu": {
+      "links": {
+        "modmenu.discord": "https://discord.gg/zEqyR6U"
+      },
+      "badges": []
+    }
+  }
+}

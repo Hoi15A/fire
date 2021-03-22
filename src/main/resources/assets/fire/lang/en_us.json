@@ -1,0 +1,9 @@
+{
+  "text.autoconfig.fire.title": "Fire! Config",
+  "text.autoconfig.fire.option.broadcastCoords": "Publicly announce coordinates?",
+  "text.autoconfig.fire.option.autoLogout": "Automatically log out?",
+  "text.autoconfig.fire.option.publicMessage": "Public message prefix",
+  "text.autoconfig.fire.option.privateMessage": "Private message prefix",
+  "text.autoconfig.fire.option.activateAfterNSeconds": "Amount of time to spend in lava until a message is sent",
+  "text.autoconfig.fire.option.cooldownSeconds": "How long should be waited until another message is sent"
+}

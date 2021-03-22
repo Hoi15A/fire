@@ -1,0 +1,9 @@
+{
+  "text.autoconfig.fire.title": "Fire! Konfiguration",
+  "text.autoconfig.fire.option.broadcastCoords": "Öffentlich koordinate verschike",
+  "text.autoconfig.fire.option.autoLogout": "Automatisch uuslogge?",
+  "text.autoconfig.fire.option.publicMessage": "Präfix für öffentlichi nachrichte",
+  "text.autoconfig.fire.option.privateMessage": "Präfix für privati nachrichte",
+  "text.autoconfig.fire.option.activateAfterNSeconds": "Wie lang söll gwartet werde bis e nachricht gschick wird",
+  "text.autoconfig.fire.option.cooldownSeconds": "Wie lang söll zwüschet nachrichte gwartet werde"
+}

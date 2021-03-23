@@ -9,7 +9,7 @@ public class FireConfig implements ConfigData {
     private boolean broadcastCoords = true;
     private String publicMessage = "[Fire] I'm burning! Coords:";
     private String privateMessage = "[Fire] Coordinates:";
-    private int activateAfterNSeconds = 3;
+    private int activateAfterNSeconds = 2;
     private int cooldownSeconds = 60;
 
     public int getCooldownSeconds() {

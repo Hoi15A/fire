@@ -8,21 +8,23 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.AbstractClientPlayerEntity;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.world.ClientWorld;
+import net.minecraft.entity.effect.StatusEffectInstance;
+import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.text.Text;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import java.util.Date;
-
 
 @Mixin(ClientPlayerEntity.class)
 public abstract class PlayerEntityMixin extends AbstractClientPlayerEntity {
 
+    private static final long COOLDOWN_DISABLED = -1;
+
     private final FireConfig config = AutoConfig.getConfigHolder(FireConfig.class).getConfig();
-    private Date playerBurnStart = null;
-    private Date cooldownUntil = null;
+    private long playerBurnStart = COOLDOWN_DISABLED;
+    private long cooldownUntil = COOLDOWN_DISABLED;
 
     public PlayerEntityMixin(ClientWorld world, GameProfile profile) {
         super(world, profile);
@@ -30,27 +32,25 @@ public abstract class PlayerEntityMixin extends AbstractClientPlayerEntity {
 
     @Inject(at = @At("TAIL"), method = "tick")
     private void tick(CallbackInfo ci) {
-        if (this.isOnFire() && !this.isCreative()) {
-            // TODO: fire resistance
-            // Fire.log(Level.INFO, "Player is burning");
-            if (Blocks.LAVA.equals(this.world.getBlockState(this.getBlockPos()).getBlock())) {
+        boolean isInLava = Blocks.LAVA.equals(this.world.getBlockState(this.getBlockPos()).getBlock());
 
-                if (playerBurnStart == null) {
-                    playerBurnStart = new Date();
-                }
+        if (this.isOnFire() && !this.isCreative() && !hasFireResistance() && isInLava) {
 
-                // Fire.log(Level.INFO, "Player is in lava");
-                if ((new Date().getTime() - playerBurnStart.getTime()) > config.getActivateAfterNSeconds() * 1_000L) {
-                    playerBurnStart = null;
+            if (playerBurnStart == COOLDOWN_DISABLED) {
+                playerBurnStart = System.currentTimeMillis();
+            }
 
-                    if (!isCooldownActive()) {
-                        activateCooldown();
-                        triggerNotification();
-                    }
+            if ((System.currentTimeMillis() - playerBurnStart) > config.getActivateAfterNSeconds() * 1_000L) {
+                playerBurnStart = COOLDOWN_DISABLED;
+
+                if (!isCooldownActive()) {
+                    activateCooldown();
+                    triggerNotification();
                 }
             }
+
         } else if (!this.isOnFire() && !this.isCreative()) {
-            playerBurnStart = null;
+            playerBurnStart = COOLDOWN_DISABLED;
         }
     }
 
@@ -66,16 +66,23 @@ public abstract class PlayerEntityMixin extends AbstractClientPlayerEntity {
     }
 
     private boolean isCooldownActive() {
-        if (cooldownUntil == null) return false;
+        if (cooldownUntil == COOLDOWN_DISABLED) return false;
 
-        if (System.currentTimeMillis() - cooldownUntil.getTime() > 0) {
-            cooldownUntil = null; // deactivate cooldown
+        if (System.currentTimeMillis() - cooldownUntil > 0) {
+            cooldownUntil = COOLDOWN_DISABLED; // deactivate cooldown
         }
 
-        return cooldownUntil != null;
+        return cooldownUntil != COOLDOWN_DISABLED;
     }
 
     private void activateCooldown() {
-        cooldownUntil = new Date(System.currentTimeMillis() + 1000L * config.getCooldownSeconds());
+        cooldownUntil = System.currentTimeMillis() + 1000L * config.getCooldownSeconds();
+    }
+
+    private boolean hasFireResistance() {
+        for (StatusEffectInstance effect : this.getStatusEffects()) {
+            if (StatusEffects.FIRE_RESISTANCE.equals(effect.getEffectType())) return true;
+        }
+        return false;
     }
 }

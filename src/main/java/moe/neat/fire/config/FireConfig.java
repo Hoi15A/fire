@@ -9,8 +9,16 @@ public class FireConfig implements ConfigData {
     private boolean broadcastCoords = true;
     private String publicMessage = "[Fire] I'm burning! Coords:";
     private String privateMessage = "[Fire] Coordinates:";
-    private int activateAfterNSeconds = 2;
-    private int cooldownSeconds = 60;
+    private int activateAfterNSeconds = 0;
+    private int cooldownSeconds = 30;
+    private int healthThreshhold = 10;
+
+    @Override
+    public void validatePostLoad() throws ValidationException {
+        if (healthThreshhold > 20 || healthThreshhold < 0) {
+            healthThreshhold = 0;
+        }
+    }
 
     public int getCooldownSeconds() {
         return cooldownSeconds;
@@ -30,5 +38,9 @@ public class FireConfig implements ConfigData {
 
     public boolean isBroadcastCoords() {
         return broadcastCoords;
+    }
+
+    public int getHealthThreshhold() {
+        return healthThreshhold;
     }
 }

@@ -26,7 +26,7 @@ public abstract class PlayerEntityMixin extends AbstractClientPlayerEntity {
     private long playerBurnStart = COOLDOWN_DISABLED;
     private long cooldownUntil = COOLDOWN_DISABLED;
 
-    public PlayerEntityMixin(ClientWorld world, GameProfile profile) {
+    protected PlayerEntityMixin(ClientWorld world, GameProfile profile) {
         super(world, profile);
     }
 
@@ -34,7 +34,7 @@ public abstract class PlayerEntityMixin extends AbstractClientPlayerEntity {
     private void tick(CallbackInfo ci) {
         boolean isInLava = Blocks.LAVA.equals(this.world.getBlockState(this.getBlockPos()).getBlock());
 
-        if (this.isOnFire() && !this.isCreative() && !hasFireResistance() && isInLava) {
+        if (this.isOnFire() && !this.isCreative() && !hasFireResistance() && isInLava && isBelowHealthThreshhold()) {
 
             if (playerBurnStart == COOLDOWN_DISABLED) {
                 playerBurnStart = System.currentTimeMillis();
@@ -69,7 +69,7 @@ public abstract class PlayerEntityMixin extends AbstractClientPlayerEntity {
         if (cooldownUntil == COOLDOWN_DISABLED) return false;
 
         if (System.currentTimeMillis() - cooldownUntil > 0) {
-            cooldownUntil = COOLDOWN_DISABLED; // deactivate cooldown
+            cooldownUntil = COOLDOWN_DISABLED;
         }
 
         return cooldownUntil != COOLDOWN_DISABLED;
@@ -77,6 +77,13 @@ public abstract class PlayerEntityMixin extends AbstractClientPlayerEntity {
 
     private void activateCooldown() {
         cooldownUntil = System.currentTimeMillis() + 1000L * config.getCooldownSeconds();
+    }
+
+    private boolean isBelowHealthThreshhold() {
+        ClientPlayerEntity player = MinecraftClient.getInstance().player;
+        assert player != null;
+
+        return player.getHealth() <= config.getHealthThreshhold();
     }
 
     private boolean hasFireResistance() {

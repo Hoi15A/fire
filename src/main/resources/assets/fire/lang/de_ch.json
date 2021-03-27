@@ -5,5 +5,6 @@
   "text.autoconfig.fire.option.publicMessage": "Präfix für öffentlichi nachrichte",
   "text.autoconfig.fire.option.privateMessage": "Präfix für privati nachrichte",
   "text.autoconfig.fire.option.activateAfterNSeconds": "Wie lang söll gwartet werde bis e nachricht gschick wird",
-  "text.autoconfig.fire.option.cooldownSeconds": "Wie lang söll zwüschet nachrichte gwartet werde"
+  "text.autoconfig.fire.option.cooldownSeconds": "Wie lang söll zwüschet nachrichte gwartet werde",
+  "text.autoconfig.fire.option.healthThreshhold": "Wie tüüf lebespünkt müend sii bis Fire aktiv wird."
 }

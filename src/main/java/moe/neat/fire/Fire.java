@@ -21,6 +21,6 @@ public class Fire implements ModInitializer {
     }
 
     public static void log(Level level, String message) {
-        LOGGER.log(level, "[Fire!] %s", message);
+        LOGGER.log(level, "[Fire!] {}", message);
     }
 }
